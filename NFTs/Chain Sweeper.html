@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain Sweeper</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            perspective: 600px;
+        }
+
+        .console {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid #aaa;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(to right, #fcfcfc, #0052ff);
+        }
+
+        .header {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bolder;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(8, 40px);
+            gap: 1px;
+            transform-style: preserve-3d;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: linear-gradient(to bottom, #ddd, #bbb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            transform-origin: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .cell:active {
+            transform: translateY(2px);
+            box-shadow: none;
+            background: linear-gradient(to bottom, #bbb, #999);
+        }
+
+        .revealed {
+            transform: none;
+            box-shadow: none;
+            background: linear-gradient(to bottom, #ccc, #7a7a7a);
+        }
+
+        .flagged {
+            background-color: #f00;
+            color: #fff;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(to bottom, #ddd, #bbb);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .reset-button:hover {
+            background: linear-gradient(to bottom, #bbb, #999);
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        .mine.exploding {
+            animation: explode 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<div class="console">
+    <div class="header">Chain Sweeper 💣</div>
+    <div class="grid" id="grid"></div>
+    <button class="reset-button" onclick="resetGame()">Reset</button>
+</div>
+
+<script>
+    let gridContainer = document.getElementById('grid');
+    let resetButton = document.querySelector('.reset-button');
+    let gridSize = 8;
+    let numMines = 10;
+    let mineLocations = [];
+    let gameEnded = false;
+    let flaggedCount = 0;
+
+    function initializeGame() {
+        createGrid();
+        placeMines();
+        updateGrid();
+    }
+
+    function createGrid() {
+        for (let i = 0; i < gridSize * gridSize; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.dataset.index = i;
+            cell.addEventListener('click', handleCellClick);
+            cell.addEventListener('contextmenu', handleCellRightClick);
+            gridContainer.appendChild(cell);
+        }
+    }
+
+    function placeMines() {
+        mineLocations = [];
+        for (let i = 0; i < numMines; i++) {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * (gridSize * gridSize));
+            } while (mineLocations.includes(randomIndex));
+
+            mineLocations.push(randomIndex);
+        }
+    }
+
+    function handleCellClick(event) {
+        if (gameEnded) return;
+
+        const clickedCell = event.target;
+        const index = parseInt(clickedCell.dataset.index);
+
+        if (event.button === 0) { // Left-click
+            if (mineLocations.includes(index)) {
+                revealMines(index);
+                resetButton.textContent = 'You hit a MINE! Reset to play again';
+            } else {
+                const adjacentMines = countAdjacentMines(index);
+                clickedCell.textContent = adjacentMines || '';
+                clickedCell.style.backgroundColor = '#ddd';
+                clickedCell.removeEventListener('click', handleCellClick);
+
+                if (adjacentMines === 0) {
+                    revealEmptyCells(index);
+                }
+            }
+
+            clickedCell.classList.add('revealed');
+            checkGameOutcome();
+        }
+    }
+
+    function handleCellRightClick(event) {
+        event.preventDefault();
+        const clickedCell = event.target;
+        const index = parseInt(clickedCell.dataset.index);
+
+        if (gameEnded) return;
+
+        if (clickedCell.classList.contains('flagged')) {
+            // If cell is already flagged, remove the flag
+            clickedCell.classList.remove('flagged');
+            clickedCell.textContent = '';
+            flaggedCount--;
+        } else if (flaggedCount < numMines) {
+            // If not already flagged and there's room for more flags, add a flag
+            clickedCell.classList.add('flagged');
+            clickedCell.textContent = '🚩';
+            flaggedCount++;
+        }
+
+        checkGameOutcome();
+    }
+
+    function countAdjacentMines(index) {
+        const neighbors = getNeighbors(index);
+        return neighbors.filter(neighbor => mineLocations.includes(neighbor)).length;
+    }
+
+    function getNeighbors(index) {
+        const row = Math.floor(index / gridSize);
+        const col = index % gridSize;
+        const neighbors = [];
+
+        for (let i = row - 1; i <= row + 1; i++) {
+            for (let j = col - 1; j <= col + 1; j++) {
+                if (i >= 0 && i < gridSize && j >= 0 && j < gridSize && !(i === row && j === col)) {
+                    neighbors.push(i * gridSize + j);
+                }
+            }
+        }
+
+        return neighbors;
+    }
+
+    function revealEmptyCells(index) {
+        const neighbors = getNeighbors(index);
+
+        for (const neighbor of neighbors) {
+            const cell = gridContainer.children[neighbor];
+            if (cell && !cell.textContent && cell.style.backgroundColor !== '#ddd') {
+                cell.click();
+            }
+        }
+    }
+
+    function revealMines(clickedIndex) {
+        for (const mineIndex of mineLocations) {
+            const mineCell = gridContainer.children[mineIndex];
+
+            if (mineIndex === clickedIndex) {
+                mineCell.textContent = '💥';
+                mineCell.classList.add('mine', 'exploding');
+
+                // Remove the explosion class after the animation ends
+                mineCell.addEventListener('animationend', function explosionEnd() {
+                    mineCell.classList.remove('exploding');
+                    mineCell.removeEventListener('animationend', explosionEnd); // Remove the listener after it's used
+                });
+            } else {
+                mineCell.textContent = '💣'; // Still reveal other mines without explosion
+            }
+        }
+
+        endGame();
+    }
+
+    function checkGameOutcome() {
+        const flaggedCells = document.querySelectorAll('.flagged');
+        const flaggedMineLocations = Array.from(flaggedCells).map(cell => parseInt(cell.dataset.index));
+        const correctFlaggedMines = flaggedMineLocations.filter(location => mineLocations.includes(location));
+
+        if (correctFlaggedMines.length === numMines && flaggedCells.length === numMines && flaggedCount === numMines) {
+            resetButton.textContent = 'You WON! Reset to play again';
+            endGame();
+        }
+    }
+
+    function endGame() {
+        gameEnded = true;
+    }
+
+    function resetGame() {
+        gridContainer.innerHTML = ''; // Clear the grid
+        gameEnded = false;
+        flaggedCount = 0;
+        resetButton.textContent = 'Reset';
+        initializeGame();
+    }
+
+    function updateGrid() {
+        // Uncomment the following line to show mine locations in the console for testing purposes
+        // console.log('Mine locations:', mineLocations);
+    }
+
+    initializeGame();
+</script>
+
+
+</body>
+</html>
