@@ -1,0 +1,181 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: white;
+    color: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+    width: 100%;
+    
+    background-color: #ffffff;
+    color: #000;
+    font-size: 45px;
+}
+
+footer {
+    text-align: center;
+    width: 100%;
+    padding: 40px;
+    margin-top: 40px;
+    background-color: #ffffff;
+    color: #000;
+} 
+
+#intro {
+    text-align: left;
+    padding: 10px;
+    max-width: 50%;
+    margin: 10px auto; /* Center the element horizontally with top and bottom margin */
+    display: flex; /* Use flex container */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    font-size: x-large;
+}
+
+#intro img {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+    display: inline-block; /* Set the image to display inline-block */
+}
+
+#home-link {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    text-decoration: none;
+}
+
+#home-link img {
+    width: 40px;
+    height: auto;
+}
+
+#games {
+    border-bottom: 2px solid #000000;
+    font-size: 45px;
+}
+
+#gallery {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    
+    margin-bottom: 0;
+}
+
+#utilityGallery {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 0;
+    
+}
+
+#utilities {
+    border-bottom: 2px solid #000000;
+    font-size: 45px;
+}
+
+.card {
+    width: 300px;
+    height: 400px;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(255, 73, 158, 0.137);
+    transition: transform 0.3s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;   
+    box-sizing: border-box;
+    position: relative; /* Add this line */
+}
+
+.card h2 {
+    color: #000000;
+    margin-top: 6px; /* Adjust margin-top as needed */
+    margin-bottom: 0px;
+    background-color: #ffffff;
+    border: 4px solid white;
+    font-size: .85vw;
+    text-align: center;
+}
+
+
+
+.card img {
+    width: 97.25%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 0;
+    transition: 0.5s ease-out; /* Added transition for a smooth effect */
+    border: 4px solid white;
+    justify-content: center;
+}
+
+.card p {
+    position: relative;
+    margin-top: 0px;
+    font-size: small;
+    overflow: hidden;
+    transition: 0.7s ease-in-out; /* Added transition for a smooth effect */
+    background-color: #ffffff;
+    border-left: 4px solid white;
+    border-bottom: 4px solid white;
+    min-height: 110px;
+}
+
+.card:hover p {
+    height: auto; /* Adjust the height as needed */
+    min-height: 100px;
+    
+}
+
+.card:hover img {
+    height: 0; /* Hide the image on hover */
+    
+}
+
+
+
+/* Media queries for responsiveness */
+@media only screen and (max-width: 1200px) {
+    .card {
+        width: 220px;
+        height: auto;
+        margin: 15px;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .card {
+        width: 200px;
+        height: 300px;
+        margin: 10px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .card {
+        width: 100%;
+        height: auto;
+        margin: 10px 0;
+    }
+}
+
+/* Adjust orientation to 2 cards wide when the screen gets too narrow */
+@media only screen and (max-width: 600px) {
+    .card {
+        width: calc(50% - 40px);
+        height: auto;
+        margin: 10px;
+        
+    }
+
+}
