@@ -11,7 +11,6 @@ body {
 header {
     text-align: center;
     width: 100%;
-    
     background-color: #ffffff;
     color: #000;
     font-size: 45px;
@@ -30,10 +29,10 @@ footer {
     text-align: left;
     padding: 10px;
     max-width: 50%;
-    margin: 10px auto; /* Center the element horizontally with top and bottom margin */
-    display: flex; /* Use flex container */
-    align-items: center; /* Center items vertically */
-    justify-content: center; /* Center items horizontally */
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: x-large;
 }
 
@@ -41,7 +40,7 @@ footer {
     width: 100px;
     height: auto;
     margin-right: 20px;
-    display: inline-block; /* Set the image to display inline-block */
+    display: inline-block;
 }
 
 #home-link {
@@ -57,7 +56,7 @@ footer {
 }
 
 #games {
-    border-bottom: 2px solid #000000;
+    text-align: center;
     font-size: 45px;
 }
 
@@ -65,7 +64,6 @@ footer {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    
     margin-bottom: 0;
 }
 
@@ -74,11 +72,10 @@ footer {
     justify-content: center;
     align-items: flex-start;
     margin-bottom: 0;
-    
 }
 
 #utilities {
-    border-bottom: 2px solid #000000;
+    text-align: center;
     font-size: 45px;
 }
 
@@ -94,12 +91,13 @@ footer {
     display: flex;
     flex-direction: column;   
     box-sizing: border-box;
-    position: relative; /* Add this line */
+    position: relative;
+    background: linear-gradient(45deg, #FFE018, #FF6C00, #FF0074);
 }
 
 .card h2 {
     color: #000000;
-    margin-top: 6px; /* Adjust margin-top as needed */
+    margin-top: 6px;
     margin-bottom: 0px;
     background-color: #ffffff;
     border: 4px solid white;
@@ -107,14 +105,12 @@ footer {
     text-align: center;
 }
 
-
-
 .card img {
     width: 97.25%;
     height: 200px;
     object-fit: cover;
     margin-bottom: 0;
-    transition: 0.5s ease-out; /* Added transition for a smooth effect */
+    transition: 0.5s ease-out;
     border: 4px solid white;
     justify-content: center;
 }
@@ -124,7 +120,7 @@ footer {
     margin-top: 0px;
     font-size: small;
     overflow: hidden;
-    transition: 0.7s ease-in-out; /* Added transition for a smooth effect */
+    transition: 0.7s ease-in-out;
     background-color: #ffffff;
     border-left: 4px solid white;
     border-bottom: 4px solid white;
@@ -132,32 +128,34 @@ footer {
 }
 
 .card:hover p {
-    height: auto; /* Adjust the height as needed */
+    height: auto;
     min-height: 100px;
-    
 }
 
 .card:hover img {
-    height: 0; /* Hide the image on hover */
-    
+    height: 0;
 }
+
 
 
 
 /* Media queries for responsiveness */
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1400px) {
     .card {
-        width: 220px;
-        height: auto;
-        margin: 15px;
+        transform: scale(0.7);
+        margin: 10px; /* Adjust the margin as needed */
+    }
+    #body {
+        transform: scale(0.7);
     }
 }
 
 @media only screen and (max-width: 900px) {
     .card {
-        width: 200px;
-        height: 300px;
-        margin: 10px;
+        scale: .5;
+    }
+    #body {
+        transform: scale(0.5);
     }
 }
 
@@ -169,13 +167,3 @@ footer {
     }
 }
 
-/* Adjust orientation to 2 cards wide when the screen gets too narrow */
-@media only screen and (max-width: 600px) {
-    .card {
-        width: calc(50% - 40px);
-        height: auto;
-        margin: 10px;
-        
-    }
-
-}
