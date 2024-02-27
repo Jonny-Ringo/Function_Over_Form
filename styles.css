@@ -137,33 +137,62 @@ footer {
 }
 
 
+/* Media Query for screens with a maximum width of 600px */
+@media only screen and (max-width: 700px) {
 
-
-/* Media queries for responsiveness */
-@media only screen and (max-width: 1400px) {
-    .card {
-        transform: scale(0.7);
-        margin: 10px; /* Adjust the margin as needed */
-    }
-    #body {
-        transform: scale(0.7);
-    }
-}
-
-@media only screen and (max-width: 900px) {
-    .card {
-        scale: .5;
-    }
-    #body {
-        transform: scale(0.5);
-    }
-}
-
-@media only screen and (max-width: 600px) {
-    .card {
+    header {
+        text-align: center;
         width: 100%;
-        height: auto;
-        margin: 10px 0;
+        background-color: #ffffff;
+        color: #000;
+        margin-top: 20px;
+        font-size: 15px;
+    }
+
+    footer {
+        text-align: center;
+        width: 100%;
+        text-align: center;
+        padding: 40px;
+        margin-top: 40px;
+        background-color: #ffffff;
+        color: #000;
+    }
+
+    #intro img {
+        display: none; /* Hide the intro image */
+    }
+
+    #intro {
+        font-size: smaller;
+    }
+
+    #home-link {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        text-decoration: none;
+    }
+
+    #gallery, #utilityGallery {
+        flex-direction: column; /* Stack cards in a single column */
+        align-items: center; /* Center cards horizontally */
+    }
+
+    .card {
+        width: 90%; /* Adjust width as needed */
+        max-width: 70%;
+        margin: 10px 0; /* Add some margin between cards */
+    }
+
+    .card h2 {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .card p {
+        font-size: small;
     }
 }
+
 
