@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hangman</title>
+  <style>
+    body {
+      font-family: "Roboto", sans-serif;
+      text-align: center;
+      margin: 30px;
+      scale: .8;
+      margin-top: 0;
+    }
+
+    #header {
+        margin-top: 0;
+    }
+
+    #difficultyToggle {
+     position: absolute;
+     top: 30px;
+     left: 30px;
+     display: flex;
+     align-items: center;
+     color: white;
+     flex-direction: column;
+    }
+
+    #difficultyToggle label {
+      margin-right: 5px;
+      color: black;
+    }
+
+    #difficultyToggle input {
+      margin-right: 10px;
+    }
+
+    #hangman {
+      width: 300px;
+      height: 300px;
+      margin: 20px auto;
+      position: relative;
+    }
+
+    #reset {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #000000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      transition: box-shadow 0.2s ease;
+    }
+
+    #reset:hover {
+      background-color: #3a3a3a;
+      
+    }
+
+    #reset:active {
+        box-shadow: none;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .gallows-part {
+      stroke: rgb(107, 62, 24);
+      stroke-width: 10;
+      fill: transparent;
+    }
+
+    .stick-figure-part {
+      stroke: black;
+      stroke-width: 4;
+      fill: white;
+    }
+    .stick-figure-part {
+      display: none; /* Initially hide stick figure parts */
+    }
+    .word-container {
+      margin-top: 20px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<h1 id="header">Hangman</h1>
+<div id="difficultyToggle">
+    <label for="easy">Easy</label>
+    <input type="radio" id="easy" name="difficulty" value="easy" onclick="setDifficulty('easy')" checked>
+  
+    <label for="medium">Medium</label>
+    <input type="radio" id="medium" name="difficulty" value="medium" onclick="setDifficulty('medium')">
+  
+    <label for="hard">Hard</label>
+    <input type="radio" id="hard" name="difficulty" value="hard" onclick="setDifficulty('hard')">
+  </div>
+
+<svg id="hangman" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <!-- Gallows structure without the stick figure -->
+  <line class="gallows-part" x1="20" y1="280" x2="150" y2="280" />
+  <line class="gallows-part" x1="150" y1="280" x2="150" y2="30" />
+  <line class="gallows-part" x1="150" y1="30" x2="200" y2="30" />
+  <line x1="200" y1="30" x2="200" y2="50" 
+  fill="none" stroke="#D2B055" stroke-width="4" stroke-linecap="round" />
+
+  <ellipse cx="200" cy="63" rx="8" ry="13" 
+  fill="none" stroke="#D2B055" stroke-width="4" stroke-linecap="round" />
+
+  
+
+
+
+  
+  <!-- Stick figure parts -->
+  <circle class="stick-figure-part head" cx="200" cy="80" r="20" />
+  <line class="stick-figure-part torso" x1="200" y1="100" x2="200" y2="150" />
+  <line class="stick-figure-part left-arm" x1="200" y1="120" x2="180" y2="140" />
+  <line class="stick-figure-part right-arm" x1="200" y1="120" x2="220" y2="140" />
+  <line class="stick-figure-part left-leg" x1="200" y1="150" x2="180" y2="170" />
+  <line class="stick-figure-part right-leg" x1="200" y1="150" x2="220" y2="170" />
+</svg>
+
+<div class="word-container" id="wordContainer"></div>
+<div>
+  <label for="letterInput">Enter a letter: </label>
+  <input type="text" id="letterInput" maxlength="1">
+  <button onclick="guessLetter()">Guess</button>
+  <div   id="resetbutton">
+  <button   id="reset" onclick="resetGame()">Reset Game</button>
+  </div>
+  <p id="gameOverMessage"></p>
+  
+</div>
+
+<script>
+   let difficulty = 'easy';
+
+function setDifficulty(level) {
+  difficulty = level;
+  resetGame();
+}
+
+function getRandomWord() {
+  let wordList;
+
+  switch (difficulty) {
+    case 'easy':
+    wordList = [
+  "cake", "tree", "frog", "gold", "moon", "rain", "fire", "fish", "bird", "rose",
+  "ball", "ship", "book", "wind", "star", "bell", "rose", "leaf", "baby", "lamp",
+  "rock", "leaf", "note", "flag", "mars", "pear", "wolf", "lamp", "maze", "door",
+  "mask", "clay", "cave", "ruby", "dawn", "pear", "bark", "surf", "park", "oven",
+  "lily", "song", "dart", "palm", "chip", "fork", "fern", "iris", "salt", "silk",
+  "kite", "rope", "mask", "fade", "fern", "ruby", "game", "fire", "opal", "soar",
+  "fern", "ruby", "sage", "mint", "tide", "dark", "moon", "wind", "tide", "fire",
+  "gold", "ruby", "opal", "leaf", "gold", "lake", "moon", "rose", "silk", "fire",
+  "sage", "gold", "fern", "maze", "opal", "bark", "gold", "rain", "maze", "rose",
+  "fern", "wolf", "tide", "lake", "bark", "opal", "ruby", "star", "maze", "iris",
+  "earth", "ocean", "apple", "juice", "sunny", "beach", "table", "chair", "tiger", "piano",
+  "storm", "heart", "fairy", "grape", "dream", "music", "panda", "queen", "honey", "smile",
+  "happy", "zebra", "dream", "earth", "jelly", "crown", "peace", "zebra", "ocean", "chess",
+  "magic", "hazel", "candy", "crane", "novel", "mango", "blend", "swirl", "dream", "sunny",
+  "cloud", "flower", "beard", "melon", "couch", "pilot", "trunk", "frost", "whale", "crisp",
+  "sugar", "chair", "stove", "maple", "olive", "toast", "wrist", "scent", "glove", "melon",
+  "beard"];
+      break;
+    case 'medium':
+    wordList = [
+  "banana", "guitar", "rocket", "silver", "frozen", "shadow", "planet", "turtle", "purple", "camera",
+  "fluent", "breeze", "sunset", "orange", "travel", "basket", "temple", "summer", "gentle", "fierce",
+  "castle", "circle", "pebble", "ribbon", "smooth", "saddle", "silent", "brunch", "gleam", "wisdom",
+  "sizzle", "drizzle", "prance", "quirky", "grains", "fumble", "shovel", "crunch", "mingle", "ripple",
+  "velvet", "glisten", "silken", "quaint", "nectar", "mellow", "harbor", "whisper", "shadow", "humble",
+  "burden", "kindle", "whimsy", "puzzle", "zigzag", "quiver", "deluxe", "sketch", "butter", "starry",
+  "zingy", "jovial", "honest", "whirl", "divine", "spirit", "glint", "zenith", "sketch", "lively",
+  "sizzle", "dapper", "jumble", "unique", "whimsy", "sprint", "prance", "glisten", "fierce", "cascade",
+  "quaint", "flutter", "lagoon", "whirl", "spiral", "cherry", "fruity", "velvet", "daring", "quiver",
+  "mesmer", "ripple", "whisper", "golden", "cascade", "crystal", "silken", "deluxe", "butter", "grains",
+  "freedom", "plaster", "program", "library", "glitter", "harmony", "account", "sanctum", "trouble", "weather",
+  "chamber", "morning", "instant", "present", "install", "history", "premium", "stretch", "central", "victory",
+  "upgrade", "explode", "comfort", "tribute", "explorer", "visible", "village", "awesome", "protest", "capture",
+  "upgrade", "courage", "tourist", "scribble", "sunrise", "realize", "hydrate", "freight", "captain", "abandon",
+  "sandwich", "analyze", "balance", "disturb", "feature", "captain", "sustain", "whisper", "wisdom", "society",
+  "airport", "revolve", "diamond", "picture", "plaster", "harmony", "program", "journey", "freight", "comfort",
+  "sanctum", "history", "install", "weather", "chamber", "instant", "capture", "explode", "victory", "upgrade",
+  "present", "explode", "morning", "library", "visible", "tribute", "premium", "upgrade", "awesome", "tourist",
+  "realize", "analyze", "freedom", "feature", "abandon", "comfort", "journey", "central", "hydrate", "sustain",
+
+];
+      break;
+    case 'hard':
+      wordList = ["solution", "elephant", "umbrella", "favorite", "creative", "tropical", "bluebird", "colorful", "laughter", "keyboard",
+  "birthday", "friendly", "memorial", "thinking", "notebook", "practice", "snowflake", "slippery", "daughter", "afternoon",
+  "magnetic", "remember", "gorgeous", "meditate", "freestyle", "adventure", "appliance", "blackout", "camouflage", "celebrate",
+  "direction", "essential", "forgotten", "generator", "happiness", "jewellery", "knowledge", "landscape", "marketing", "nutrition",
+  "operation", "permanent", "questions", "restaurant", "serendipity", "telephone", "understand", "vegetable", "waterfall", "appreciate",
+  "background", "celebration", "difference", "educational", "friendship", "hypothesis", "information", "journalist", "laboratory",
+  "mysterious", "newsletter", "orangutan", "persuasion", "qualification", "revolution", "satisfaction", "traditional", "volunteer",
+  "wanderlust", "xylophone", "yellowstone", "zookeeper", "abracadabra", "boulevard", "cappuccino", "dandelion", "enthusiasm", "flabbergast",
+  "gobbledegook", "hippopotamus", "juxtaposition", "kaleidoscope", "lackadaisical", "magnificent", "necessitate", "obfuscation", "perpendicular",
+  "quizzically", "breathe", "climbing", "dominate", "eternity", "festival", "generate", "happiness", "invisible", "judgment", "kangaroo",
+  "landscape", "mysterious", "narrative", "operation", "paradise", "quarantine", "rebellion", "secretive", "transform", "umbrella",
+  "velocity", "whisper", "evidence", "exquisite", "fantastic", "gratitude", "holistic", "illusion", "jubilant", "kaleidoscope",
+  "labyrinth", "marvelous", "nominate", "optimism", "paradigm", "quintessence", "radiant", "symphony", "tantalize", "ultimate",
+  "vibrant", "wonderful", "xenophobic", "yearning", "zeppelin", "accidental", "benevolent", "cosmopolitan", "diaphanous", "ephemeral",
+  "fluctuate", "gregarious", "hierarchical", "incandescent", "juxtapose", "luminous", "meticulous", "nonchalant", "obfuscate"];
+      break;
+    default:
+      wordList = [];
+  }
+
+  return wordList[Math.floor(Math.random() * wordList.length)];
+}
+
+function initializeGame() {
+  selectedWord = getRandomWord();
+  guessedWord = Array(selectedWord.length).fill('_');
+  wrongGuessCount = 0;
+  document.querySelectorAll(".stick-figure-part").forEach(part => part.style.display = "none");
+  updateWordDisplay();
+}
+
+function updateWordDisplay() {
+  document.getElementById("wordContainer").innerText = guessedWord.join(' ');
+}
+
+function guessLetter() {
+  const letterInput = document.getElementById("letterInput");
+  const guessedLetter = letterInput.value.toLowerCase();
+
+
+  if (selectedWord.includes(guessedLetter)) {
+    for (let i = 0; i < selectedWord.length; i++) {
+      if (selectedWord[i] === guessedLetter) {
+        guessedWord[i] = guessedLetter;
+      }
+    }
+  } else {
+    wrongGuessCount++;
+    const stickFigurePart = document.querySelector(`.stick-figure-part:nth-child(${wrongGuessCount + 5})`);
+
+    if (stickFigurePart) {
+      stickFigurePart.style.display = "initial";
+    }
+
+    if (wrongGuessCount === 6) {
+      displayGameOverMessage(false);
+      return;
+    }
+  }
+
+  // Update word display before checking game state
+  updateWordDisplay();
+
+  if (!guessedWord.includes('_')) {
+    displayGameOverMessage(true);
+    return;
+  }
+
+  letterInput.value = "";
+}
+
+function resetGame() {
+  initializeGame();
+  document.getElementById("gameOverMessage").style.display = "none";
+  // Clear the guess entry line
+  document.getElementById("letterInput").value = "";
+}
+
+function displayGameOverMessage(win) {
+  const gameOverMessage = document.getElementById("gameOverMessage");
+
+  // ... existing code ...
+
+  gameOverMessage.style.display = "block";
+  gameOverMessage.innerText = win ? 
+    `Congratulations! You guessed the word: ${selectedWord}` : 
+    `Game over! The correct word was: ${selectedWord}`;
+}
+
+initializeGame(); // Initialize the game on page load
+
+  </script>
+  
+
+</body>
+</html>
+
+
