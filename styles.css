@@ -197,8 +197,14 @@ footer {
         color: #000;
     }
 
-    #intro img {
-        display: none; /* Hide the intro image */
+    #baselogo {
+        max-width: 70%;
+        height: auto;
+    }
+
+    #arweavelogo {
+        max-width: 80%;
+        height: auto;
     }
 
     #intro {
