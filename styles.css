@@ -13,7 +13,50 @@ header {
     width: 100%;
     background-color: #ffffff;
     color: #000;
-    font-size: 45px;
+    font-size: 45px; 
+    margin-bottom: 0;
+}
+
+#baselogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15vh; /* This ensures the logo takes full height of the viewport */
+    margin: 20px auto; /* Adjust the top margin as needed */
+}
+
+#arweavelogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15vh; /* This ensures the logo takes full height of the viewport */
+    margin: 20px auto; /* Adjust the top margin as needed */
+}
+
+.page-menu {
+    background-color: white; /* Set the background color of the menu */
+    padding: 25px 10px; /* Add padding for spacing */
+    text-align: center; /* Center the links horizontally */
+    width: 70%;
+    border-top: solid 2px;
+    border-bottom: solid 2px;
+}
+
+.page-menu a {
+    width: 100vh;
+    color: rgb(0, 0, 0); /* Set the text color of the links */
+    text-decoration: none; /* Remove underlines from links */
+    margin: 0px 15px; /* Add margin for spacing between links */
+    padding: 8px 12px; /* Add padding to make links look like buttons */
+    border: 2px solid black; /* Add a border to create an outline */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    transition: background-color 0.3s; /* Add transition for a smooth effect */
+    box-shadow: 2px 2px 4px black;
+}
+
+.page-menu a:active {
+    background-color: #c7c7c7; /* Change the background color on hover */
+    box-shadow: none;
 }
 
 footer {
@@ -26,22 +69,17 @@ footer {
 } 
 
 #intro {
-    text-align: left;
-    padding: 10px;
+    text-align: center;
+    padding: 0px;
     max-width: 50%;
-    margin: 10px auto;
+    margin: 0px auto;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: x-large;
 }
 
-#intro img {
-    width: 100px;
-    height: auto;
-    margin-right: 20px;
-    display: inline-block;
-}
+
 
 #home-link {
     position: absolute;
