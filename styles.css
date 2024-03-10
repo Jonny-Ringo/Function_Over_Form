@@ -34,28 +34,28 @@ header {
 }
 
 .page-menu {
-    background-color: white; /* Set the background color of the menu */
-    padding: 25px 10px; /* Add padding for spacing */
-    text-align: center; /* Center the links horizontally */
+    background-color: white;
+    padding: 25px 10px;
+    text-align: center;
     width: 70%;
-    border-top: solid 2px;
-    border-bottom: solid 2px;
+    border-top: solid 2px black;
+    border-bottom: solid 2px black;
 }
 
 .page-menu a {
-    width: 100vh;
-    color: rgb(0, 0, 0); /* Set the text color of the links */
-    text-decoration: none; /* Remove underlines from links */
-    margin: 0px 15px; /* Add margin for spacing between links */
-    padding: 8px 12px; /* Add padding to make links look like buttons */
-    border: 2px solid black; /* Add a border to create an outline */
-    border-radius: 5px; /* Add border radius for rounded corners */
-    transition: background-color 0.3s; /* Add transition for a smooth effect */
+    width: 30%;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    margin: 0px 15px;
+    padding: 8px 12px;
+    border: 2px solid black;
+    border-radius: 5px;
+    transition: background-color 0.3s;
     box-shadow: 2px 2px 4px black;
 }
 
 .page-menu a:active {
-    background-color: #c7c7c7; /* Change the background color on hover */
+    background-color: #c7c7c7;
     box-shadow: none;
 }
 
@@ -196,6 +196,7 @@ footer {
         background-color: #ffffff;
         color: #000;
     }
+    
 
     #baselogo {
         max-width: 70%;
@@ -222,6 +223,14 @@ footer {
         flex-direction: column; /* Stack cards in a single column */
         align-items: center; /* Center cards horizontally */
     }
+
+    .page-menu a {
+        width: auto; /* Allow buttons to fit content */
+        margin: 5px auto; /* Center buttons with automatic margins */
+        display: block; /* Stack the links */
+        padding: 10px; /* Increase touch area */
+    }
+
 
     .card {
         max-width: 70%;
