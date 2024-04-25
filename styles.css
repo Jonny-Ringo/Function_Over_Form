@@ -21,7 +21,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 15vh; /* This ensures the logo takes full height of the viewport */
+    height: 10vh; /* This ensures the logo takes full height of the viewport */
     margin: 20px auto; /* Adjust the top margin as needed */
 }
 
@@ -29,7 +29,15 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 15vh; /* This ensures the logo takes full height of the viewport */
+    height: 10vh; /* This ensures the logo takes full height of the viewport */
+    margin: 20px auto; /* Adjust the top margin as needed */
+}
+
+#oplogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh; /* This ensures the logo takes full height of the viewport */
     margin: 20px auto; /* Adjust the top margin as needed */
 }
 
